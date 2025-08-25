@@ -20,7 +20,7 @@ Keeping track of dotfiles can be hard sometimes so why not automate *most* of th
 ### Installation
 
 ```bash
-cargo install fuxi
+cargo install fuxi-cli
 ```
 
 ### Building from source
@@ -29,6 +29,12 @@ cargo install fuxi
 git clone https://github.com/ImShyMike/fuxi.git
 cd fuxi
 cargo build --release
+```
+
+## Usage
+
+```bash
+fuxi
 ```
 
 ## License
