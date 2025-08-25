@@ -34,17 +34,44 @@ pub fn push_to_github(
     message: Option<String>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("Pushing to GitHub...");
-    run_git_command(repo_path, &["add", "."])?;
 
-    let status = run_git_command(repo_path, &["status", "--porcelain"])?;
+    println!("Adding files...");
+    if let Err(e) = run_git_command(repo_path, &["add", "."]) {
+        return Err(format!("Failed to add files: {}", e).into());
+    }
+
+    println!("Checking status...");
+    let status = match run_git_command(repo_path, &["status", "--porcelain"]) {
+        Ok(status) => status,
+        Err(e) => return Err(format!("Failed to check status: {}", e).into()),
+    };
+
     if status.trim().is_empty() {
         println!("No changes to commit.");
         return Ok(());
     }
 
     let commit_msg = message.unwrap_or_else(|| "Automated backup commit".to_string());
-    run_git_command(repo_path, &["commit", "-m", commit_msg.as_str()])?;
-    run_git_command(repo_path, &["push", "origin", branch])?;
+    println!("Committing with message: '{}'", commit_msg);
+    if let Err(e) = run_git_command(repo_path, &["commit", "-m", commit_msg.as_str()]) {
+        return Err(format!("Failed to commit: {}", e).into());
+    }
+
+    println!("Checking remote configuration...");
+    match run_git_command(repo_path, &["remote", "-v"]) {
+        Ok(remotes) => {
+            if remotes.trim().is_empty() {
+                return Err("No remote repository configured. Please add a remote with 'git remote add origin <url>'".into());
+            }
+            println!("Remotes configured:\n{}", remotes);
+        }
+        Err(e) => return Err(format!("Failed to check remotes: {}", e).into()),
+    };
+
+    println!("Pushing to remote...");
+    if let Err(e) = run_git_command(repo_path, &["push", "origin", branch]) {
+        return Err(format!("Failed to push: {}", e).into());
+    }
 
     println!("Successfully pushed to GitHub!");
     Ok(())
