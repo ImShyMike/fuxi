@@ -2,6 +2,10 @@
 name = "fuxi"
 version = "0.1.0"
 edition = "2024"
+license-file = "LICENSE"
+repository = "https://github.com/ImShyMike/fuxi"
+description = "dotfile organization made easy"
+readme = "README.md"
 
 [dependencies]
 chrono = { version = "0.4.41", features = ["serde"] }
