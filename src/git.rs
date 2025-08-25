@@ -1,20 +1,31 @@
-use std::{path::Path, process::Command};
+use std::path::Path;
+use std::process::{Command, Stdio};
 
 pub fn run_git_command(
     repo_path: &Path,
     args: &[&str],
 ) -> Result<String, Box<dyn std::error::Error>> {
     let output = Command::new("git")
-        .current_dir(repo_path)
         .args(args)
+        .current_dir(repo_path)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .envs(std::env::vars())
         .output()?;
 
     if !output.status.success() {
-        let error = String::from_utf8_lossy(&output.stderr);
-        return Err(format!("Git command failed: {}", error).into());
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        return Err(format!(
+            "Git command failed with exit code {}:\nstdout: {}\nstderr: {}",
+            output.status.code().unwrap_or(-1),
+            stdout,
+            stderr
+        )
+        .into());
     }
 
-    Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
+    Ok(String::from_utf8_lossy(&output.stdout).to_string())
 }
 
 pub fn push_to_github(

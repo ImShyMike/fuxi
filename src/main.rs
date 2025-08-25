@@ -115,8 +115,8 @@ fn get_selected_profile_paths(config: &FuxiConfig) -> Vec<String> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config_path = get_config_path()?;
-    let _data_dir = dirs::data_dir().unwrap().join("fuxi");
-    let _cache_dir = dirs::cache_dir().unwrap().join("fuxi");
+    // let _data_dir = dirs::data_dir().unwrap().join("fuxi");
+    // let _cache_dir = dirs::cache_dir().unwrap().join("fuxi");
 
     let mut config = load_config()?;
 
