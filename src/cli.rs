@@ -38,6 +38,7 @@ pub fn cli() -> Command {
         .subcommand(
             Command::new("profile")
                 .about("Manage profiles")
+                .arg_required_else_help(true)
                 .subcommand(Command::new("list").about("List all profiles"))
                 .subcommand(
                     Command::new("create")
@@ -58,6 +59,7 @@ pub fn cli() -> Command {
         .subcommand(
             Command::new("path")
                 .about("Manage paths")
+                .arg_required_else_help(true)
                 .subcommand(Command::new("list").about("List all paths"))
                 .subcommand(Command::new("add").about("Add path(s)").arg(
                     arg!(<PATH> ... "Paths to add").value_parser(clap::value_parser!(PathBuf)),
