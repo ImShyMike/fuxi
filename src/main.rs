@@ -122,9 +122,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let matches = cli().get_matches();
     match matches.subcommand() {
-        Some(("login", _)) => {
-            println!("Logging in...");
-        }
         Some(("version", _)) => {
             println!("fuxi version {}", env!("CARGO_PKG_VERSION"));
         }

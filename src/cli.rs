@@ -20,7 +20,6 @@ pub fn cli() -> Command {
         .about("fuxi CLI")
         .subcommand_required(true)
         .arg_required_else_help(true)
-        .subcommand(Command::new("login").about("Authenticate the user"))
         .subcommand(Command::new("version").about("Show version information"))
         .subcommand(
             Command::new("config")
